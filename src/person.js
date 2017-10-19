@@ -12,11 +12,10 @@
  import {context} from './context.js';
 
 class Person {
-  constructor(name,surname,points) {
+  constructor(name,surname,points,tasks) {
     this.name = name;
     this.surname = surname;
     this.points = points;
-    //this.context = context;    
     this.gradedTasks = [];    
   }    
   
@@ -50,7 +49,7 @@ class Person {
     });
 
     let that = this;
-    this.calculatedPoints = 0;
+    //this.calculatedPoints = 0;
     this.gradedTasks.forEach(function(gTaskItem) {      
         let inputEl = document.createElement("input");    
         inputEl.type = "number";inputEl.min=0;inputEl.max = 100;  
