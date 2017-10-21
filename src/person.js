@@ -53,7 +53,7 @@ class Person {
     this.gradedTasks.forEach(function(taskItem) {
         let inputEl = document.createElement("input");    
         inputEl.type = "number";inputEl.min=0;inputEl.max = 100;  
-        inputEl.value = taskItem["points"]
+        inputEl.value = taskItem["points"];
 
         inputEl.addEventListener("change", function(event) {
           that.addPoints(parseInt(taskItem["points"])*(-1));

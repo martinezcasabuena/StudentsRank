@@ -60,7 +60,7 @@ class Context {
                 var liEl = studentItem.getHTMLView();
                 studentsEl.appendChild(liEl);
             });
-        }
+        };
         loadTemplate("templates/ranking.html",callback);       
     }
 
@@ -101,7 +101,7 @@ class Context {
                 that.students.push(newStudent);
                 localStorage.setItem("students", JSON.stringify(that.students));
             });
-        }
+        };
         loadTemplate("templates/formUser.html",callback);        
     }
     
@@ -122,7 +122,7 @@ class Context {
                 localStorage.setItem("tasks", JSON.stringify(that.gradedTasks));
                 that.getRanking();
             });
-        }
+        };
         loadTemplate("templates/formTask.html",callback); 
     }
 }

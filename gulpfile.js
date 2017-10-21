@@ -2,12 +2,13 @@ var fs = require("fs");
 var browserify = require("browserify");
 var gulp = require('gulp');
 var webserver = require('gulp-webserver');
+var jshint = require('gulp-jshint');
 
 if (!fs.existsSync("dist")){
   fs.mkdirSync("dist");
 }
 
-///babelify, es6 to es5
+//babelify, es6 to es5
 gulp.task('browserify', function() {
 browserify("./src/main.js")
   .transform("babelify", {presets: ["es2015"]})
@@ -15,7 +16,7 @@ browserify("./src/main.js")
   .pipe(fs.createWriteStream("dist/main.js"));
 });
 
-///http server live reload (html changes)
+//http server live reload (html changes)
 gulp.task('webserver', function() {
   gulp.src('./')
   .pipe(webserver({
@@ -23,6 +24,13 @@ gulp.task('webserver', function() {
     directoryListing: false,
     open: true
   }));
+});
+
+//Check the final code
+gulp.task('lint', function() {
+  return gulp.src('./src/*.js')
+    .pipe(jshint())
+    .pipe(jshint.reporter('fail'));
 });
 
 // watch any change

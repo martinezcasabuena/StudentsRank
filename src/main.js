@@ -7,4 +7,4 @@ window.onload = function() {
   //let context = new Context();
   context.initContext();
   context.getRanking();
-}
+};
