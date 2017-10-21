@@ -10,7 +10,6 @@ function hashcode(str) {
   return hash;
 };
 
-
 /** Pass a text or an element ang get a td table element wrapping it. */ 
 function getElementTd(text) {
   let tdEl = document.createElement("td");
@@ -33,19 +32,6 @@ function loadTemplate(urlTemplate,callback){
   xhttp.open("GET",urlTemplate, true);
   xhttp.send();
 
-}
-
-function makeRequest(filename, callback) {
-  var xhttp = new XMLHttpRequest();
-  xhttp.open('GET', filename, true);
-  xhttp.send();
-  xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-          document.getElementById('content').innerHTML =
-          this.responseText;
-          callback();
-      }
-  };
 }
 
 export {hashcode,getElementTd,loadTemplate};

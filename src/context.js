@@ -45,59 +45,30 @@ class Context {
             return (b.points - a.points);
         });
 
-        /*var studentsEl = document.getElementById("llistat");
-   
-        while (studentsEl.firstChild) {
-            studentsEl.removeChild(studentsEl.firstChild);
-        }
-
-        let headerString="<tr><td colspan='3'></td>";
-        this.gradedTasks.forEach(function(taskItem){            
-            headerString+="<td>"+taskItem.name+"</td>";
-        });
-        studentsEl.innerHTML= headerString;
-        this.students.forEach(function(studentItem) {
-            var liEl = studentItem.getHTMLView();
-            studentsEl.appendChild(liEl);
-        });*/
-        
         let callback = function (responseText){
             let studentsEl = document.getElementById("llistat");
-            console.log("dentro");
             while (studentsEl.firstChild) {
                 studentsEl.removeChild(studentsEl.firstChild);
             }
-            console.log(that.students,"estudiantes");
-            console.log(that.gradedTasks,"taskas");
             
             let headerString="<tr><td colspan='3'></td>";
             that.gradedTasks.forEach(function(taskItem){
-                //console.log(taskItem);            
                 headerString+="<td>"+taskItem.name+"</td>";
             });
             studentsEl.innerHTML= headerString;
             that.students.forEach(function(studentItem) {
-                //console.log(studentItem);                            
                 var liEl = studentItem.getHTMLView();
                 studentsEl.appendChild(liEl);
             });
         }
         loadTemplate("templates/ranking.html",callback);       
-
     }
 
     getStudents(){
         var that=this;
         var savedStudents = JSON.parse( localStorage.getItem('students'));
-        //console.log(savedStudents);
-        
-        for (var i in savedStudents) { //for each
-            //console.log(savedStudents[i])
-            // console.log("name",savedStudents[i].name);
-            // console.log("surname",savedStudents[i].surname);
-            // console.log("points",savedStudents[i].points);
-            // console.log("gradedTasks",savedStudents[i].gradedTasks);
 
+        for (var i in savedStudents) { //for each
             var student= new Person(savedStudents[i].name,savedStudents[i].surname,savedStudents[i].points,savedStudents[i].gradedTasks);
             this.students.push(student);
         }
@@ -109,11 +80,9 @@ class Context {
         //console.log(savedTasks);
 
         for (var i in savedTasks) { //for each
-            //console.log(savedTasks[i])
             var task= new GradedTask(savedTasks[i].name);
             this.gradedTasks.push(task);
         }
-        
     }
 
     addNewStudent(){
@@ -131,49 +100,31 @@ class Context {
                 }
                 that.students.push(newStudent);
                 localStorage.setItem("students", JSON.stringify(that.students));
-                
             });
         }
         loadTemplate("templates/formUser.html",callback);        
     }
     
-
 /** Create a form to create a GradedTask that will be added to every student */
    addGradedTask(){        
-    // let taskName = prompt("Please enter your task name");
-    // let gtask = new GradedTask(taskName);
-    // this.gradedTasks.push(gtask);
-    // this.students.forEach(function(studentItem) {            
-    //     studentItem.addGradedTask(gtask);
-    // });
-    // this.getRanking();
-
-    var that=this;
-    let callback = function (responseText){
-        let addTask = document.getElementById("saveTask");
-        addTask.addEventListener("click",() => {                                
-            let taskName = document.getElementById("taskName").value;
-            //debugger;
-            //console.log(taskName);
-
-            //console.log(that.gradedTasks);
-            let newTask= new GradedTask(taskName);
-            //console.log(newTask);
-            that.gradedTasks.push(newTask);
-            console.log(that.gradedTasks);          
-            //console.log(that.students);
-            that.students.forEach(function(studentItem) {        
-                studentItem.addGradedTask(newTask);
+       var that=this;
+       let callback = function (responseText){
+           let addTask = document.getElementById("saveTask");
+           addTask.addEventListener("click",() => {
+               let taskName = document.getElementById("taskName").value;
+               let newTask= new GradedTask(taskName);
+               that.gradedTasks.push(newTask);
+               console.log(that.gradedTasks);          
+               that.students.forEach(function(studentItem) {        
+                   studentItem.addGradedTask(newTask);
+                });
+                localStorage.setItem("students", JSON.stringify(that.students));            
+                localStorage.setItem("tasks", JSON.stringify(that.gradedTasks));
+                that.getRanking();
             });
-            localStorage.setItem("students", JSON.stringify(that.students));            
-            localStorage.setItem("tasks", JSON.stringify(that.gradedTasks));
-            that.getRanking();
-        });
+        }
+        loadTemplate("templates/formTask.html",callback); 
     }
-    loadTemplate("templates/formTask.html",callback); 
-
-}
-    
 }
 
 export let context = new Context();

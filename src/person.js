@@ -30,11 +30,6 @@ class Person {
   }
   /** Renders HTML person view Create a table row (tr) with all name, points , add button and one input for every gradded task binded for that person. */
   getHTMLView() {
-    // console.log("name",this.name);
-    // console.log("surname",this.surname);
-    // console.log("points",this.points);
-    // console.log("gradedTasks",this.gradedTasks);
-
     var liEl = document.createElement("tr");
 
     liEl.appendChild(getElementTd(this.surname + ", " + this.name));
@@ -59,11 +54,13 @@ class Person {
         let inputEl = document.createElement("input");    
         inputEl.type = "number";inputEl.min=0;inputEl.max = 100;  
         inputEl.value = taskItem["points"]
+
         inputEl.addEventListener("change", function(event) {
-        that.addPoints(parseInt(taskItem["points"])*(-1));
-        taskItem["points"] = inputEl.value;
-        that.addPoints(parseInt(taskItem["points"]));
-        context.getRanking();      
+          that.addPoints(parseInt(taskItem["points"])*(-1));
+          taskItem["points"] = inputEl.value;
+          that.addPoints(parseInt(taskItem["points"]));
+          localStorage.setItem("students", JSON.stringify(context.students));        
+          context.getRanking();
       });
       liEl.appendChild(getElementTd(inputEl));
     });
