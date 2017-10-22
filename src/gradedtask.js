@@ -3,13 +3,13 @@
  * @constructor
  * @param {string} name - task name
  * @tutorial pointing-criteria
- */ 
+ */
 
-class GradedTask {  
-  constructor(name) {  	
-    this.name = name;     
+class GradedTask {
+  constructor(name) {
+    this.name = name;
 
-  }    
+  }
 }
 
 export default GradedTask;

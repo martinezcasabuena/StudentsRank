@@ -19,8 +19,10 @@
     "gulp": "^3.9.1",
     "gulp-babel": "^7.0.0",
     "gulp-browserify": "^0.5.1",
+    "gulp-jscs": "^4.0.0",
     "gulp-jshint": "^2.0.4",
     "gulp-webserver": "^0.9.1",
+    "jscs": "^3.0.7",
     "jshint": "^2.9.5"
   }
 }
