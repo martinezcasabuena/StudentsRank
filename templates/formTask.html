@@ -1,14 +1,20 @@
 <html>
     <head>
-
+        <title>New task</title>
     </head>
     <body>
         <form id="content">
-            <label>Name</label>
-            <input type="text" placeholder="Enter name of task" id="taskName" value="" required>
-            <br><br>
-            <button type="submit" id="saveTask">Add Task</button>
-
+            <table>
+                <tr>
+                    <td align="left"><label>Name</label><br><br></td>
+                    <td><input type="text" placeholder="Enter name of task" id="taskName" value="" required><br><br></td>
+                </tr>
+                    <td colspan="2" align="center">
+                        <button type="button" id="btnCancel">Cancel</button>&nbsp;&nbsp;
+                        <button type="submit" id="saveTask">Add Task</button>
+                    </td>
+                </tr>
+            </table>
         </form>
     </body>
 

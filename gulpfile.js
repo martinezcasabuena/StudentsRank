@@ -28,7 +28,7 @@ gulp.task('webserver', function() {
   }));
 });
 
-//Check the final code
+//Check the code with jshint
 gulp.task('lint', function() {
   return gulp.src('./src/*.js')
     .pipe(jshint())
@@ -41,6 +41,7 @@ gulp.task('watch', ['browserify'], function () {
 });
 gulp.task('default', ['browserify', 'webserver', 'watch']);
 
+//Check the code with jscs
 gulp.task('jscs', function() {
   gulp.src('./src/*.js')
     .pipe(jscs({fix: true}))

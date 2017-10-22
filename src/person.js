@@ -5,6 +5,7 @@
  * @param {string} name - Person name
  * @param {string} surname - Person surname
  * @param {number} points - Person total points 
+ * @param {array} gradedTasks - Person graded tasks
  * @tutorial pointing-criteria
  */ 
  
@@ -22,6 +23,7 @@ class Person {
   /** Add points to persons we should carefully use it. */
   addPoints(points) {
         this.points += points;
+        localStorage.setItem("students", JSON.stringify(context.students));                
   }
   /** Add a gradded task linked to person with its own mark. */
   addGradedTask(taskInstance) {

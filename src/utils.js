@@ -21,6 +21,7 @@ function getElementTd(text) {
    return tdEl;
 }
 
+/** Pass a callback and it will be executed when template is load. */ 
 function loadTemplate(urlTemplate,callback){
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
@@ -31,7 +32,6 @@ function loadTemplate(urlTemplate,callback){
   };
   xhttp.open("GET",urlTemplate, true);
   xhttp.send();
-
 }
 
 export {hashcode,getElementTd,loadTemplate};

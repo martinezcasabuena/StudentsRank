@@ -23,6 +23,7 @@
     "gulp-jshint": "^2.0.4",
     "gulp-webserver": "^0.9.1",
     "jscs": "^3.0.7",
+    "jsdoc": "^3.5.5",
     "jshint": "^2.9.5"
   }
 }
