@@ -39,6 +39,7 @@ class Person {
     liEl.appendChild(getElementTd(this.points));    
     
     var addPointsEl = document.createElement("button");
+    addPointsEl.className='button_attitude';
     var tb = document.createTextNode("+20");
     addPointsEl.appendChild(tb);
 

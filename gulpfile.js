@@ -44,6 +44,8 @@ gulp.task('default', ['browserify', 'webserver', 'watch']);
 //Check the code with jscs
 gulp.task('jscs', function() {
   gulp.src('./src/*.js')
-    .pipe(jscs({fix: true}))
-    .pipe(gulp.dest('src'));
+    //.pipe(jscs({fix: true}))
+    //.pipe(gulp.dest('src'));
+    .pipe(jscs())
+    .pipe(jscs.reporter());
 });

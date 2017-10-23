@@ -46,7 +46,7 @@ class Context {
 
             let headerString = '<tr align=\'center\'><td colspan=\'3\'></td>';
             that.gradedTasks.forEach(function(taskItem) {
-                headerString+='<td>' + taskItem.name + '</td>';
+                headerString+='<td align=\'center\'>' + taskItem.name + '</td>';
             });
             studentsEl.innerHTML = headerString;
             that.students.forEach(function(studentItem) {

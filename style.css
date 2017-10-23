@@ -1,2 +1,73 @@
 /* Styles go here */
 
+
+body {
+
+    background-color: lightblue;
+}
+
+
+.button_menu{
+    text-decoration: none;
+    padding: 10px;
+    font-size: 15px;
+    color: #ffffff;
+    background-color: teal;
+    border-radius: 6px;
+    border: 1px solid;
+  }
+
+.button_menu:hover{
+    color: teal;
+    background-color: #ffffff;
+}
+
+.button_attitude{
+    text-decoration: none;
+    padding: 8px;
+    color: #ffffff;
+    background-color: teal;
+    border-radius: 6px;
+    border: 1px solid;
+}
+
+.button_attitude:hover{
+    color: teal;
+    background-color: #ffffff;
+}
+
+input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type=number], select {
+    width: 100%;
+    padding: 5px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+form {
+    width:300px;
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+}
+
+#llistat{
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+    border-spacing: 10px 2px;
+    
+}
+
