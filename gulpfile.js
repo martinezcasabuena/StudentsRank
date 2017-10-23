@@ -4,7 +4,7 @@ var gulp = require('gulp');
 var webserver = require('gulp-webserver');
 var jshint = require('gulp-jshint');
 var jscs = require('gulp-jscs');
-
+var jsdoc = require('gulp-jsdoc3');
 
 if (!fs.existsSync("dist")){
   fs.mkdirSync("dist");
@@ -29,17 +29,22 @@ gulp.task('webserver', function() {
 });
 
 //Check the code with jshint
-gulp.task('lint', function() {
+gulp.task('jshint', function() {
   return gulp.src('./src/*.js')
     .pipe(jshint())
     .pipe(jshint.reporter('default'))
+});
+
+//Task to launch jsdoc
+gulp.task('doc', function (cb) {
+  gulp.src(['README.md', './src/*.js'], {read: false})
+      .pipe(jsdoc(cb));
 });
 
 // watch any change
 gulp.task('watch', ['browserify'], function () {
     gulp.watch('./src/**/*.js', ['browserify']);
 });
-gulp.task('default', ['browserify', 'webserver', 'watch']);
 
 //Check the code with jscs
 gulp.task('jscs', function() {
@@ -49,3 +54,5 @@ gulp.task('jscs', function() {
     .pipe(jscs())
     .pipe(jscs.reporter());
 });
+
+gulp.task('default', ['browserify','doc','jshint','jscs','webserver', 'watch']);

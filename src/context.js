@@ -16,7 +16,6 @@ class Context {
     this.gradedTasks = [];
     this.getStudents();
     this.getTasks();
-
   }
 
   initContext(){
@@ -90,7 +89,7 @@ class Context {
                 let studentName = document.getElementById('studentName').value;
                 let studentLastName = document.getElementById('studentLastName').value;
 
-                if((studentName !== "") && (studentLastName !== "")){
+                if ((studentName !== '') && (studentLastName !== '')){
                     let newStudent = new Person(studentName,studentLastName, 0, []);
                     if (that.gradedTasks.length != 0){
                         that.gradedTasks.forEach(function(taskItem) {
@@ -116,11 +115,11 @@ class Context {
        let callback = function(responseText) {
            let addTask = document.getElementById('saveTask');
            let btnCancel = document.getElementById('btnCancel');
-           
+
            addTask.addEventListener('click',() => {
                let taskName = document.getElementById('taskName').value;
 
-               if(taskName !== ""){
+               if (taskName !== ''){
                    let newTask = new GradedTask(taskName);
                    that.gradedTasks.push(newTask);
                    that.students.forEach(function(studentItem) {
