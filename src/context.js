@@ -5,139 +5,114 @@
  * @tutorial pointing-criteria
  */
 
+/*jshint -W061 */
+
 import Person from './person.js';
 import GradedTask from './gradedtask.js';
-import {hashcode,getElementTd,loadTemplate} from './utils.js';
+import {hashcode,getElementTd,deleteContent,loadTemplate} from './utils.js';
 
 class Context {
 
   constructor() {
     this.students = [];
     this.gradedTasks = [];
-    this.getStudents();
-    this.getTasks();
-  }
 
-  initContext(){
+    if (localStorage.getItem('students')) {
+      let students_ = JSON.parse(localStorage.getItem('students'));
+      for (let i = 0;i < students_.length;i++) {
+        let p = new Person(students_[i].name,students_[i].surname,
+          students_[i].attitudeTasks,students_[i].gradedTasks);
+        this.students.push(p);
+      }
+    }
+    if (localStorage.getItem('gradedTasks')) {
+      this.gradedTasks = JSON.parse(localStorage.getItem('gradedTasks'));
+    }
+  }
+  /** Init nav bar menu and manipulate evetntlisteners to menu items */
+  initMenu() {
     let addTask = document.getElementById('addGradedTask');
     addTask.addEventListener('click', () => {
-          this.addGradedTask();
+      this.addGradedTask();
     });
-
     let addStudent = document.getElementById('addStudent');
-    addStudent.addEventListener('click',() => {
-        this.addNewStudent();
+    addStudent.addEventListener('click', () => {
+      this.addPerson();
     });
   }
 
   /** Draw Students rank table in descendent order using points as a criteria */
-  getRanking(){
-        let that = this;
-        this.students.sort(function(a, b) {
-            return (b.points - a.points);
-        });
+  getTemplateRanking() {
 
-        let callback = function(responseText) {
-            let studentsEl = document.getElementById('llistat');
-            while (studentsEl.firstChild) {
-                studentsEl.removeChild(studentsEl.firstChild);
-            }
+    if (this.students && this.students.length > 0) {
+      /* We sort students descending from max number of points to min */
+      this.students.sort(function(a, b) {
+        return (b.getTotalPoints() - a.getTotalPoints());
+      });
+      localStorage.setItem('students',JSON.stringify(this.students));
+      let GRADED_TASKS = '';
+      this.gradedTasks.forEach(function(taskItem) {
+        GRADED_TASKS += '<td>' + taskItem.name + '</td>';
+      });
 
-            let headerString = '<tr align=\'center\'><td colspan=\'3\'></td>';
-            that.gradedTasks.forEach(function(taskItem) {
-                headerString+='<td align=\'center\'>' + taskItem.name + '</td>';
-            });
-            studentsEl.innerHTML = headerString;
-            that.students.forEach(function(studentItem) {
+      loadTemplate('templates/rankingList.html',function(responseText) {
+              document.getElementById('content').innerHTML = eval('`' + responseText + '`');
+              let tableBody = document.getElementById('idTableRankingBody');
+              this.students.forEach(function(studentItem) {
                 let liEl = studentItem.getHTMLView();
-                studentsEl.appendChild(liEl);
-            });
-        };
-        loadTemplate('templates/ranking.html',callback);
+                tableBody.appendChild(liEl);
+              });
+            }.bind(this));
     }
+  }
 
-    /** Get the students from the local storage */
-    getStudents(){
-        let that = this;
-        let savedStudents = JSON.parse(localStorage.getItem('students'));
+  /** Create a form to create a GradedTask that will be added to every student */
+  addGradedTask() {
 
-        for (var i in savedStudents) {
-            let student = new Person(savedStudents[i].name,savedStudents[i].surname,savedStudents[i].points,savedStudents[i].gradedTasks);
-            this.students.push(student);
-        }
-    }
+    let callback = function(responseText) {
+            let saveGradedTask = document.getElementById('newGradedTask');
 
-    /** Get the tasks from the local storage */
-    getTasks(){
-        let that = this;
-        let savedTasks = JSON.parse(localStorage.getItem('tasks'));
-
-        for (var i in savedTasks) {
-            let task = new GradedTask(savedTasks[i].name);
-            this.gradedTasks.push(task);
-        }
-    }
-
-    /** Creates a new student and saves it on local storage */
-    addNewStudent(){
-        let that = this;
-        let callback = function(responseText) {
-            let saveStudent = document.getElementById('saveStudent');
-            let btnCancel = document.getElementById('btnCancel');
-
-            saveStudent.addEventListener('click',() => {
-                let studentName = document.getElementById('studentName').value;
-                let studentLastName = document.getElementById('studentLastName').value;
-
-                if ((studentName !== '') && (studentLastName !== '')){
-                    let newStudent = new Person(studentName,studentLastName, 0, []);
-                    if (that.gradedTasks.length != 0){
-                        that.gradedTasks.forEach(function(taskItem) {
-                            newStudent.addGradedTask(taskItem);
-                        });
-                    }
-                    that.students.push(newStudent);
-                    localStorage.setItem('students', JSON.stringify(that.students));
-                }
+            saveGradedTask.addEventListener('submit', () => {
+              let name = document.getElementById('idTaskName').value;
+              let description = document.getElementById('idTaskDescription').value;
+              let weight = document.getElementById('idTaskWeight').value;
+              let gtask = new GradedTask(name,description,weight);
+              this.gradedTasks.push(gtask);
+              localStorage.setItem('gradedTasks',JSON.stringify(this.gradedTasks));
+              this.students.forEach(function(studentItem) {
+                studentItem.addGradedTask(gtask);
+              });
+              this.getTemplateRanking();
             });
+          }.bind(this);
 
-            btnCancel.addEventListener('click',() => {
-                that.getRanking();
+    loadTemplate('templates/addGradedTask.html',callback);
+  }
+  /** Add a new person to the context app */
+  addPerson() {
+
+    let callback = function(responseText) {
+            let saveStudent = document.getElementById('newStudent');
+
+            saveStudent.addEventListener('submit', () => {
+              let name = document.getElementById('idFirstName').value;
+              let surnames = document.getElementById('idSurnames').value;
+              let student = new Person(name,surnames,[],[]);
+              this.gradedTasks.forEach(function(iGradedTask) {
+                    student.addGradedTask(new GradedTask(iGradedTask.name));
+                  });
+              this.students.push(student);
+              localStorage.setItem('students',JSON.stringify(this.students));
             });
-        };
-        //Launch the form an execute the callback
-        loadTemplate('templates/formUser.html',callback);
-    }
+          }.bind(this);
 
-    /** Creates a GradedTask and saves it on local storage */
-    addGradedTask(){
-       let that = this;
-       let callback = function(responseText) {
-           let addTask = document.getElementById('saveTask');
-           let btnCancel = document.getElementById('btnCancel');
+    loadTemplate('templates/addStudent.html',callback);
+  }
+  /** Add last action performed to lower information layer in main app */
 
-           addTask.addEventListener('click',() => {
-               let taskName = document.getElementById('taskName').value;
-
-               if (taskName !== ''){
-                   let newTask = new GradedTask(taskName);
-                   that.gradedTasks.push(newTask);
-                   that.students.forEach(function(studentItem) {
-                       studentItem.addGradedTask(newTask);
-                    });
-                 localStorage.setItem('students', JSON.stringify(that.students));
-                 localStorage.setItem('tasks', JSON.stringify(that.gradedTasks));
-                 that.getRanking();
-               }
-            });
-
-            btnCancel.addEventListener('click',() => {
-                that.getRanking();
-            });
-        };
-        //Launch the form an execute the callback
-        loadTemplate('templates/formTask.html',callback);
-    }
+  notify(text) {
+    document.getElementById('notify').innerHTML = text;
+  }
 }
 
-export let context = new Context();
+export let context = new Context(); //Singleton export
