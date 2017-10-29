@@ -87,6 +87,7 @@ class Person {
     liEl.appendChild(getElementTd(this[_totalPoints]));
 
     let addAttitudeTaskEl = document.createElement('button');
+    addAttitudeTaskEl.className='button_attitude';    
     let tb = document.createTextNode('+XP');
     addAttitudeTaskEl.appendChild(tb);
 
