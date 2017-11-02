@@ -32,6 +32,12 @@ function deleteContent() {
 }
 
 function loadTemplate(urlTemplate,callback) {
+  /*if(CAHE_TEMPLAtES.has(urlTemplate)){
+    return callback(CACHE_TEMPLATES.get(urlTemplate))
+  
+  }else{*/
+
+  
   let xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState === 4 && this.status === 200) {
@@ -42,6 +48,7 @@ function loadTemplate(urlTemplate,callback) {
   };
   xhttp.open('GET', urlTemplate, true);
   xhttp.send();
+//}
 }
 
 function popupwindow(url, title, w, h) {

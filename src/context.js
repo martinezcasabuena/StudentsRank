@@ -12,6 +12,7 @@ import GradedTask from './gradedtask.js';
 import {hashcode,getElementTd,deleteContent,loadTemplate} from './utils.js';
 
 class Context {
+  
 
   constructor() {
     this.students = [];
@@ -20,7 +21,7 @@ class Context {
     if (localStorage.getItem('students')) {
       let students_ = JSON.parse(localStorage.getItem('students'));
       for (let i = 0;i < students_.length;i++) {
-        let p = new Person(students_[i].name,students_[i].surname,
+        let p = new Person(students_[i].idPerson,students_[i].name,students_[i].surname,
           students_[i].attitudeTasks,students_[i].gradedTasks);
         this.students.push(p);
       }
@@ -31,14 +32,16 @@ class Context {
   }
   /** Init nav bar menu and manipulate evetntlisteners to menu items */
   initMenu() {
-    let addTask = document.getElementById('addGradedTask');
+    /*let addTask = document.getElementById('addGradedTask');
     addTask.addEventListener('click', () => {
       this.addGradedTask();
     });
     let addStudent = document.getElementById('addStudent');
     addStudent.addEventListener('click', () => {
-      this.addPerson();
-    });
+      //this.addPerson();
+      var x = location.hash;
+      console.log(x);      
+    });*/
   }
 
   /** Draw Students rank table in descendent order using points as a criteria */
@@ -97,7 +100,9 @@ class Context {
             saveStudent.addEventListener('submit', () => {
               let name = document.getElementById('idFirstName').value;
               let surnames = document.getElementById('idSurnames').value;
-              let student = new Person(name,surnames,[],[]);
+              let idPerson = hashcode(name+surnames);
+              alert(idPerson);
+              let student = new Person(idPerson,name,surnames,[],[]);
               this.gradedTasks.forEach(function(iGradedTask) {
                     student.addGradedTask(new GradedTask(iGradedTask.name));
                   });

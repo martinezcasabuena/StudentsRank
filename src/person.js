@@ -2,6 +2,7 @@
  * Person class. We store personal information and attitudePoints that reflect daily classroom job
  *
  * @constructor
+ * @param {array} idPerson - Person id
  * @param {string} name - Person name
  * @param {string} surname - Person surname
  * @param {array} attitudeTasks - Person awarded AttitudeTasks array   
@@ -17,11 +18,11 @@ const privateAddTotalPoints = Symbol('privateAddTotalPoints'); /** To accomplish
 const _totalPoints = Symbol('TOTAL_POINTS'); /** To acomplish private property */
 
 class Person {
-  constructor(name,surname,attitudeTasks,gradedTasks) {
+  constructor(idPerson,name,surname,attitudeTasks,gradedTasks) {
     this[_totalPoints] = 0;
     this.name = name;
     this.surname = surname;
-
+    this.idPerson = idPerson;
     this.attitudeTasks = attitudeTasks;
     this.gradedTasks = gradedTasks;
 
@@ -63,10 +64,13 @@ class Person {
    * every gradded task binded for that person. */
   getHTMLView() {
     let liEl = document.createElement('tr');
-
+    let detailsBtn = document.createElement('a');
+    detailsBtn.href = "#detailStudent";
+    
     let esEL = getElementTd(this.surname + ', ' + this.name);
-    esEL.addEventListener('click', () => {
-      loadTemplate('templates/detailStudent.html',function(responseText) {
+    //esEL.addEventListener('click', () => {
+      //this.getDetails();
+      /*loadTemplate('templates/detailStudent.html',function(responseText) {
         let STUDENT = this;
         let ATTITUDE_TASKS = '';
         this.attitudeTasks.reverse().forEach(function(atItem) {
@@ -79,10 +83,11 @@ class Person {
                         gtItem.task.name + '->' + formatDate(new Date(gtItem.task.datetime)) + '</li>';
         });
         document.getElementById('content').innerHTML = eval('`' + responseText + '`');
-      }.bind(this));
-    });
-
-    liEl.appendChild(esEL);
+      }.bind(this));*/
+      //this.getDetails();
+    //});
+    detailsBtn.appendChild(esEL);
+    liEl.appendChild(detailsBtn);
 
     liEl.appendChild(getElementTd(this[_totalPoints]));
 
@@ -128,6 +133,26 @@ class Person {
       });
 
     return liEl;
+  }
+
+  getDetails(){
+    let callback = function(responseText) {
+      let STUDENT = this;
+      let ATTITUDE_TASKS = '';
+      this.attitudeTasks.reverse().forEach(function(atItem) {
+        ATTITUDE_TASKS += '<li>' + atItem.task.points + '->' +
+                      atItem.task.description + '->' + formatDate(new Date(atItem.task.datetime)) + '</li>';
+      });
+      let GRADED_TASKS = '';
+      this.gradedTasks.forEach(function(gtItem) {
+        GRADED_TASKS += '<li>' + gtItem.points + '->' +
+                      gtItem.task.name + '->' + formatDate(new Date(gtItem.task.datetime)) + '</li>';
+      });
+      document.getElementById('content').innerHTML = eval('`' + responseText + '`');
+    }.bind(this);
+
+    loadTemplate('templates/detailStudent.html',callback);
+    
   }
 }
 
