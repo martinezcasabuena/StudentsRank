@@ -8,8 +8,8 @@ window.onload = function() {
   //context.initMenu();
   context.getTemplateRanking();
 
-  location.hash='#ranking';
-  window.onhashchange = hashChange;
+  location.hash='';
+  window.onhashchange = hashChange;     
   
   function hashChange(){
     switch(location.hash){
@@ -18,9 +18,6 @@ window.onload = function() {
         break;
       case '#addGradedTask':
         context.addGradedTask();
-        break;
-      case '#ranking':
-        context.getTemplateRanking();
         break;
       case '#detailStudent':
         context.getDetails();

@@ -64,28 +64,84 @@ class Person {
    * every gradded task binded for that person. */
   getHTMLView() {
     let liEl = document.createElement('tr');
+
+    let aDelete = document.createElement('a');
+    let btnDelete = document.createElement('button');
+
+    btnDelete.className = "btnDelete";
+    aDelete.href = "#deleteStudent";
+    aDelete.appendChild(btnDelete);
+    liEl.appendChild(getElementTd(aDelete));
+    
+    let aEdit = document.createElement('a');
+    let btnEdit = document.createElement('button');
+    let lblEdit = document.createTextNode('Edit');
+    btnEdit.appendChild(lblEdit);
+    btnDelete.className = "btnDelete";    
+    aEdit.href = "#editStudent";
+    aEdit.appendChild(btnEdit);    
+    liEl.appendChild(getElementTd(aEdit));
+    
+    aDelete.addEventListener('click', () => {
+      console.log(context.students);
+      var r = confirm("Are you sure you want to delete the user " + this.name + " " + this.surname + "?");
+      if (r == true) {
+        var removeStudent = context.students.map(function(item) { return item.idPerson; }).indexOf(this.idPerson);
+        context.students.splice(removeStudent, 1);
+        localStorage.setItem('students',JSON.stringify(context.students));
+        context.getTemplateRanking();
+      }
+    });
+
+    aEdit.addEventListener('click', () => {
+      let callback = function(responseText) {
+        let saveStudent = document.getElementById('newStudent');
+        let name = document.getElementById('idFirstName');
+        let surnames = document.getElementById('idSurnames');
+        name.value = this.name;
+        surnames.value = this.surname;
+
+        saveStudent.addEventListener('submit', () => {
+          name = document.getElementById('idFirstName').value;
+          surnames = document.getElementById('idSurnames').value;
+          for (var i in context.students) {
+            if (context.students[i].idPerson == this.idPerson) {
+              context.students[i].name = name;
+              context.students[i].surname = surnames;
+              context.students[i].idPerson = hashcode(name+surnames);
+              break;
+            }
+          }
+          localStorage.setItem('students',JSON.stringify(context.students));
+        });
+      }.bind(this);
+      
+      loadTemplate('templates/addStudent.html',callback);
+      
+    });
+      
+    
     let detailsBtn = document.createElement('a');
     detailsBtn.href = "#detailStudent";
+    detailsBtn.id = "details-"+this.idPerson;
     
     let esEL = getElementTd(this.surname + ', ' + this.name);
-    //esEL.addEventListener('click', () => {
-      //this.getDetails();
-      /*loadTemplate('templates/detailStudent.html',function(responseText) {
-        let STUDENT = this;
-        let ATTITUDE_TASKS = '';
-        this.attitudeTasks.reverse().forEach(function(atItem) {
-          ATTITUDE_TASKS += '<li>' + atItem.task.points + '->' +
-                        atItem.task.description + '->' + formatDate(new Date(atItem.task.datetime)) + '</li>';
-        });
-        let GRADED_TASKS = '';
-        this.gradedTasks.forEach(function(gtItem) {
-          GRADED_TASKS += '<li>' + gtItem.points + '->' +
-                        gtItem.task.name + '->' + formatDate(new Date(gtItem.task.datetime)) + '</li>';
-        });
-        document.getElementById('content').innerHTML = eval('`' + responseText + '`');
-      }.bind(this));*/
-      //this.getDetails();
-    //});
+    // esEL.addEventListener('click', () => {
+    //   loadTemplate('templates/detailStudent.html',function(responseText) {
+    //     let STUDENT = this;
+    //     let ATTITUDE_TASKS = '';
+    //     this.attitudeTasks.reverse().forEach(function(atItem) {
+    //       ATTITUDE_TASKS += '<li>' + atItem.task.points + '->' +
+    //                     atItem.task.description + '->' + formatDate(new Date(atItem.task.datetime)) + '</li>';
+    //     });
+    //     let GRADED_TASKS = '';
+    //     this.gradedTasks.forEach(function(gtItem) {
+    //       GRADED_TASKS += '<li>' + gtItem.points + '->' +
+    //                     gtItem.task.name + '->' + formatDate(new Date(gtItem.task.datetime)) + '</li>';
+    //     });
+    //     document.getElementById('content').innerHTML = eval('`' + responseText + '`');
+    //   }.bind(this));
+    // });
     detailsBtn.appendChild(esEL);
     liEl.appendChild(detailsBtn);
 
