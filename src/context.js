@@ -42,8 +42,8 @@ class Context {
       let GRADED_TASKS_BUTTON = '';      
       let GRADED_TASKS = '';
       this.gradedTasks.forEach(function(taskItem) {
-        GRADED_TASKS_BUTTON += '<td>' + '<button id="editTask">Edit</button>' + '</td>'; 
-        GRADED_TASKS += '<td>' + taskItem.name + '</td>';
+        GRADED_TASKS_BUTTON += '<td align=\'center\'>' + '<a id=\'editTask\' class=\'btnEditTask\'/>' + '</td>'; 
+        GRADED_TASKS += '<td align=\'center\'>' + taskItem.name + '</td>';
       });      
 
       loadTemplate('templates/rankingList.html',function(responseText) {
@@ -56,8 +56,10 @@ class Context {
               this.gradedTasks.forEach(function(gradedtask) {
                 let editTask = document.getElementById('editTask');
                 editTask.id=gradedtask.name;
-                editTask.addEventListener('click', () => {
+                editTask.href='#editTask';
 
+                /**Event click to edit the task*/
+                editTask.addEventListener('click', () => {
                   let callback = function(responseText) {
                     let saveGradedTask = document.getElementById('newGradedTask');                    
                     let idTaskName = document.getElementById('idTaskName');
@@ -131,10 +133,9 @@ class Context {
 
     loadTemplate('templates/addStudent.html',callback);
   }
-  /** Add last action performed to lower information layer in main app */
 
+/** Call to getDetails() function. Not used because is not working properly*/
   getDetails() {
-    alert(this.id);
     this.students.forEach(function(studentItem) {
       console.log(studentItem);
       studentItem.getDetails();

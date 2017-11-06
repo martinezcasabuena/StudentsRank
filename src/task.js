@@ -3,6 +3,7 @@
  * @constructor
  * @param {string} name - task name
  * @param {string} description - task description
+ * @param {date} datetime - task date
  * @tutorial pointing-criteria
  */
 

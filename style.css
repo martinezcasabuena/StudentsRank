@@ -82,8 +82,47 @@ textarea {
 }
 
 .btnDelete {
-    height: 32px;
+    background-image:url(/img/deleteImg.png);
+    background-repeat: no-repeat;    
+    display: block;
     width: 32px;
-    background-image:url(/img/deleteimg.png);
+    height: 32px;
+}
 
+.btnEditStudent {
+    background-image:url(/img/editStudentImg.png);
+    background-repeat: no-repeat;    
+    display: block;
+    width: 32px;
+    height: 32px;
+}
+
+.btnEditTask {
+    background-image:url(/img/editTask.png);
+    background-repeat: no-repeat;    
+    display: block;
+    width: 34px;
+    height: 34px;
+}
+
+.xp{
+    text-decoration: none;
+    padding: 8px;
+    color: #ffffff;
+    background-color: teal;
+    border-radius: 6px;
+    border: 1px solid;
+}
+
+.btnDetailsStudent {
+    text-decoration: none;
+    color: black;
+    margin-left: 5px;
+    margin-right: 5px;
+    font-size: 16px;
+    font-family: Arial;
+}
+
+.celdaNameStudent {
+    padding-top:12px; 
 }

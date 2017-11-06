@@ -64,27 +64,22 @@ class Person {
    * every gradded task binded for that person. */
   getHTMLView() {
     let liEl = document.createElement('tr');
+    liEl.className='trTable';
 
     let aDelete = document.createElement('a');
-    let btnDelete = document.createElement('button');
-
-    btnDelete.className = "btnDelete";
-    aDelete.href = "#deleteStudent";
-    aDelete.appendChild(btnDelete);
+    aDelete.className = 'btnDelete';
+    aDelete.href = '#deleteStudent';
     liEl.appendChild(getElementTd(aDelete));
     
     let aEdit = document.createElement('a');
-    let btnEdit = document.createElement('button');
-    let lblEdit = document.createTextNode('Edit');
-    btnEdit.appendChild(lblEdit);
-    btnDelete.className = "btnDelete";    
-    aEdit.href = "#editStudent";
-    aEdit.appendChild(btnEdit);    
+    aEdit.className = 'btnEditStudent';    
+    aEdit.href = '#editStudent';
     liEl.appendChild(getElementTd(aEdit));
     
+    /**Delete a student*/
     aDelete.addEventListener('click', () => {
       console.log(context.students);
-      var r = confirm("Are you sure you want to delete the user " + this.name + " " + this.surname + "?");
+      var r = confirm('Are you sure you want to delete the user ' + this.name + ' ' + this.surname + '?');
       if (r == true) {
         var removeStudent = context.students.map(function(item) { return item.idPerson; }).indexOf(this.idPerson);
         context.students.splice(removeStudent, 1);
@@ -93,6 +88,7 @@ class Person {
       }
     });
 
+    /**Edit a student*/
     aEdit.addEventListener('click', () => {
       let callback = function(responseText) {
         let saveStudent = document.getElementById('newStudent');
@@ -122,26 +118,29 @@ class Person {
       
     
     let detailsBtn = document.createElement('a');
-    detailsBtn.href = "#detailStudent";
-    detailsBtn.id = "details-"+this.idPerson;
+    detailsBtn.className='btnDetailsStudent';
+    detailsBtn.href = '#detailStudent';
+    detailsBtn.id = 'details-'+this.idPerson;
     
     let esEL = getElementTd(this.surname + ', ' + this.name);
-    // esEL.addEventListener('click', () => {
-    //   loadTemplate('templates/detailStudent.html',function(responseText) {
-    //     let STUDENT = this;
-    //     let ATTITUDE_TASKS = '';
-    //     this.attitudeTasks.reverse().forEach(function(atItem) {
-    //       ATTITUDE_TASKS += '<li>' + atItem.task.points + '->' +
-    //                     atItem.task.description + '->' + formatDate(new Date(atItem.task.datetime)) + '</li>';
-    //     });
-    //     let GRADED_TASKS = '';
-    //     this.gradedTasks.forEach(function(gtItem) {
-    //       GRADED_TASKS += '<li>' + gtItem.points + '->' +
-    //                     gtItem.task.name + '->' + formatDate(new Date(gtItem.task.datetime)) + '</li>';
-    //     });
-    //     document.getElementById('content').innerHTML = eval('`' + responseText + '`');
-    //   }.bind(this));
-    // });
+    esEL.className='celdaNameStudent';
+    /**Details of student*/
+    esEL.addEventListener('click', () => {
+      loadTemplate('templates/detailStudent.html',function(responseText) {
+        let STUDENT = this;
+        let ATTITUDE_TASKS = '';
+        this.attitudeTasks.reverse().forEach(function(atItem) {
+          ATTITUDE_TASKS += '<li>' + atItem.task.points + '->' +
+                        atItem.task.description + '->' + formatDate(new Date(atItem.task.datetime)) + '</li>';
+        });
+        let GRADED_TASKS = '';
+        this.gradedTasks.forEach(function(gtItem) {
+          GRADED_TASKS += '<li>' + gtItem.points + '->' +
+                        gtItem.task.name + '->' + formatDate(new Date(gtItem.task.datetime)) + '</li>';
+        });
+        document.getElementById('content').innerHTML = eval('`' + responseText + '`');
+      }.bind(this));
+    });
     detailsBtn.appendChild(esEL);
     liEl.appendChild(detailsBtn);
 
@@ -154,15 +153,24 @@ class Person {
 
     liEl.appendChild(getElementTd(addAttitudeTaskEl));
 
+    /**Open popUp to add Attitude Tasks*/
     addAttitudeTaskEl.addEventListener('click', () => {
           let popUp = popupwindow('templates/listAttitudeTasks.html','XP points to ' +
-                                   this.name,300,400);
+                                   this.name,300,430);
           let personInstance = this;
           popUp.onload = function() {
             popUp.document.title = personInstance.name + ' ' +
                                   personInstance.surname + ' XP points';
             let xpButtons = popUp.document.getElementsByClassName('xp');
             Array.prototype.forEach.call(xpButtons,function(xpBItem) {
+              xpBItem.addEventListener('click', () => {
+                popUp.close();
+                personInstance.addAttitudeTask(new AttitudeTask('XP task',
+                                          xpBItem.innerHTML,xpBItem.value));
+              });
+            });
+            let xpnegButtons = popUp.document.getElementsByClassName('xp-neg');
+            Array.prototype.forEach.call(xpnegButtons,function(xpBItem) {
               xpBItem.addEventListener('click', () => {
                 popUp.close();
                 personInstance.addAttitudeTask(new AttitudeTask('XP task',
@@ -191,6 +199,7 @@ class Person {
     return liEl;
   }
 
+/** Get the details of the student. Not used because is not working properly*/
   getDetails(){
     let callback = function(responseText) {
       let STUDENT = this;

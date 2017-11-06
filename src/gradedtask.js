@@ -6,6 +6,8 @@ import Task from './task.js';
  * are part of this category.
  * @constructor
  * @param {string} name - task name
+ * @param {string} description - task description
+ * @param {int} weight - task weight
  * @tutorial pointing-criteria
  */
 
