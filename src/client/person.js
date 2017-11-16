@@ -70,6 +70,23 @@ class Person {
     return GradedTask.getStudentGradedTasksPoints(this.getId());
   }
 
+  getFinalMark() {
+    let percentageGT = localStorage.getItem('percentageGT');
+    let percentageXP = 100 - percentageGT;
+    let pointsXP = this.getTotalPoints();
+    let pointsGT = this.getGTtotalPoints();
+    //console.log("porcentaje",percentageXP);
+    //console.log("puntosXP",pointsXP);
+      
+    return ((pointsGT * percentageGT) / 100) + ((pointsXP * percentageXP) / 100);
+    
+  }
+
+  getProfileImage() {
+    let imageRoute = "../src/server/data/images/" + this.getId() +".jpg";
+    return imageRoute;
+  }
+
   /** Renders person edit form */
   getHTMLEdit() {
     let callback = function(responseText) {

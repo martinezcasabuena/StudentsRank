@@ -19,7 +19,7 @@ class Context {
   constructor() {
     this.students = new Map();
     this.gradedTasks = new Map();
-    this.settingsArray = [];        
+    //this.settingsArray = [];        
     this.showNumGradedTasks = 1;//Max visible graded tasks in ranking list table
     if (getCookie('user')) {
       this.user = JSON.parse(getCookie('user'));
@@ -209,6 +209,10 @@ class Context {
             let saveSettings = document.getElementById('settings');
             let labelValuePercentageXP = document.getElementById('percentageXPValue');
             let labelValuePercentageGT = document.getElementById('percentageGTValue');
+            sliderPercentage.value = (localStorage.getItem('percentageGT'));
+            labelValuePercentageGT.innerText = "Graded Tasks " + sliderPercentage.value + "%";
+            labelValuePercentageXP.innerText = "XP " + (sliderPercentage.value - 100) + "%";
+            
             
             sliderPercentage.addEventListener('change',(event) => {
               console.log(sliderPercentage.value);
@@ -217,10 +221,11 @@ class Context {
             });
 
             saveSettings.addEventListener('submit', (event) => {
-              console.log(this.settingsArray);
-              this.settingsArray.push('percentageGT',sliderPercentage.value);
-              localStorage.setItem('settings',JSON.stringify([...this.settingsArray]));
-
+              //console.log(this.settingsArray);
+              //this.settingsArray.push('percentageGT',sliderPercentage.value);
+              //localStorage.setItem('settings',JSON.stringify([...this.settingsArray]));
+              localStorage.setItem('percentageGT', sliderPercentage.value);
+              console.log(localStorage.getItem('percentageGT'));
               return false; //Avoid form submit
             });
           }.bind(this);
