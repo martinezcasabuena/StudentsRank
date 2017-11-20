@@ -98,7 +98,7 @@ class Context {
       /* We sort students descending from max number of points to min */
       let arrayFromMap = [...this.students.entries()];
       arrayFromMap.sort(function(a,b) {
-        return (b[1].getTotalPoints() - a[1].getTotalPoints());
+        return (b[1].getFinalMark() - a[1].getFinalMark());
       });
       this.students = new Map(arrayFromMap);
 
@@ -177,12 +177,17 @@ class Context {
 
     loadTemplate('templates/addGradedTask.html',callback);
   }
+  
   /** Add a new person to the context app */
   addPerson() {
 
     let callback = function(responseText) {
             document.getElementById('content').innerHTML = responseText;
             let saveStudent = document.getElementById('newStudent');
+            let profileImage = document.getElementById('profileImage');
+            profileImage.addEventListener('change', (event) => {
+              alert();
+            });
 
             saveStudent.addEventListener('submit', (event) => {
               event.preventDefault();

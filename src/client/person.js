@@ -70,16 +70,14 @@ class Person {
     return GradedTask.getStudentGradedTasksPoints(this.getId());
   }
 
+  /** Calculate the Final Mark and returns*/
+
   getFinalMark() {
     let percentageGT = localStorage.getItem('percentageGT');
     let percentageXP = 100 - percentageGT;
     let pointsXP = this.getTotalPoints();
     let pointsGT = this.getGTtotalPoints();
-    //console.log("porcentaje",percentageXP);
-    //console.log("puntosXP",pointsXP);
-      
     return ((pointsGT * percentageGT) / 100) + ((pointsXP * percentageXP) / 100);
-    
   }
 
   getProfileImage() {

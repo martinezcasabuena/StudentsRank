@@ -54,3 +54,26 @@ function saveGradedTasks(gradedTasksJSON) {
       return data;
     }});
 }*/
+
+
+// function uploadFile() {
+//   var blobFile = $('#profileImage').files[0];
+//   var formData = new FormData();
+//   formData.append("fileToUpload", blobFile);
+
+//   $.ajax({
+//      url: "upload.php",
+//      type: "POST",
+//      data: formData,
+//      processData: false,
+//      contentType: false,
+//      success: function(response) {
+//        console.log("bien");
+//          // .. do something
+//      },
+//      error: function(jqXHR, textStatus, errorMessage) {
+//        console.log("error");
+//          console.log(errorMessage); // Optional
+//      }
+//   });
+// }
