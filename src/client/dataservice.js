@@ -32,13 +32,6 @@ function saveGradedTasks(arrayGT) {
                         },'POST',localStorage.getItem('gradedTasks'),false);
 }
 
-/*function saveSettings(arraySettings) {
-  localStorage.setItem('settings',arraySettings);
-  loadTemplate('api/saveStudents',function(response) {
-                          console.log('SAVE STUDENTS ' + response);
-                        },'POST',localStorage.getItem('students'),false);
-}*/
-
 function loadStudentsToLocalStorage() {
   if (localStorage.getItem('students')) {
     let students_ = new Map(JSON.parse(localStorage.getItem('students')));
@@ -60,12 +53,5 @@ function loadGradedTasksToLocalStorage() {
     context.gradedTasks = gradedTasks_;
   }
 }
-
-/*function loadSettings(){
-  if (localStorage.getItem('settings')) {
-    let settings_ = new Map(JSON.parse(localStorage.getItem('settings')));
-
-  }  
-}*/
 
 export {updateFromServer,saveStudents,saveGradedTasks};

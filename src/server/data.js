@@ -9,7 +9,8 @@ var fs = require('fs');
 
 module.exports = {
   saveGradedTasks: saveGradedTasks,
-  saveStudents: saveStudents
+  saveStudents: saveStudents,
+  saveImage: saveImage
 };
 
 function saveStudents(studentsJSON) {
@@ -54,6 +55,18 @@ function saveGradedTasks(gradedTasksJSON) {
       return data;
     }});
 }*/
+
+function saveImage(){
+  let img = localStorage.getItem('profileImages')
+
+  var data = img.replace(/^data:image\/\w+;base64,/, "");
+  //var buf = new Buffer(data, 'base64');
+  //fs.writeFile('image.png', buf);
+  //fs.writeFile('src/server/data/images/' + 'image.png', buf);
+  fs.writeFile("imagen.png", data, {encoding: 'base64'}, function(err){
+    console.log('err', err);
+  });
+}
 
 
 // function uploadFile() {

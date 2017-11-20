@@ -13,6 +13,8 @@ import {updateFromServer,saveStudents,saveGradedTasks} from './dataservice.js';
 import {hashcode,loadTemplate,setCookie,getCookie} from './utils.js';
 import {generateMenu} from './menu.js';
 import {template} from './templator.js';
+import {saveImage} from '../server/data.js';
+
 
 class Context {
 
@@ -185,9 +187,19 @@ class Context {
             document.getElementById('content').innerHTML = responseText;
             let saveStudent = document.getElementById('newStudent');
             let profileImage = document.getElementById('profileImage');
-            profileImage.addEventListener('change', (event) => {
-              alert();
-            });
+            /*profileImage.addEventListener('change', (event) => {
+            });*/
+
+            $('input[type="file"]').on('change', function () {
+              var reader = new FileReader();
+              reader.onload = function () {
+                  var thisImage = reader.result;
+                  localStorage.setItem("profileImages", thisImage);
+              };
+              reader.readAsDataURL(this.files[0]);
+              //saveImage();
+          });
+
 
             saveStudent.addEventListener('submit', (event) => {
               event.preventDefault();
