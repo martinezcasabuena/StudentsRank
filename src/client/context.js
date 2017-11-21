@@ -9,11 +9,11 @@
 
 import Person from './person.js';
 import GradedTask from './gradedtask.js';
-import {updateFromServer,saveStudents,saveGradedTasks} from './dataservice.js';
+import {updateFromServer,saveStudents,saveGradedTasks,uploadImage} from './dataservice.js';
 import {hashcode,loadTemplate,setCookie,getCookie} from './utils.js';
 import {generateMenu} from './menu.js';
 import {template} from './templator.js';
-import {saveImage} from '../server/data.js';
+//import {saveImage} from '../server/data.js';
 
 
 class Context {
@@ -189,17 +189,20 @@ class Context {
             let profileImage = document.getElementById('profileImage');
             /*profileImage.addEventListener('change', (event) => {
             });*/
-
+            let thisImage;
             $('input[type="file"]').on('change', function () {
               var reader = new FileReader();
               reader.onload = function () {
-                  var thisImage = reader.result;
-                  localStorage.setItem("profileImages", thisImage);
+                  thisImage = reader.result;
+                  //localStorage.setItem("profileImages", thisImage);
               };
               reader.readAsDataURL(this.files[0]);
-              //saveImage();
-          });
+              //Call to saveImge function on /server/data.js to save image to disk.
+              //saveImage(thisImage);
 
+              //console.log(thisImage);
+              //uploadImage(thisImage);
+          });
 
             saveStudent.addEventListener('submit', (event) => {
               event.preventDefault();
@@ -210,6 +213,8 @@ class Context {
                     iGradedTask.addStudentMark(student.getId(),0);
                   });
               this.students.set(student.getId(),student);
+              console.log(thisImage);
+              uploadImage(thisImage);
               this.getTemplateRanking();
               return false; //Avoid form submit
             });

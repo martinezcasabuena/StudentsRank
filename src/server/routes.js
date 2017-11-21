@@ -38,6 +38,17 @@ router.post('/saveGradedTasks',function(req, res) {
     }
 });
 
+
+router.post('/uploadImage',function(req, res) {  
+    var data = req.replace(/^data:image\/\w+;base64,/, "");
+    //var buf = new Buffer(data, 'base64');
+    //fs.writeFile(data, buf);
+    //fs.writeFile('src/server/data/images/' + 'image.png', buf);
+    fs.writeFile('src/server/data/images/' + "nombre" + '.jpg', data, {encoding: 'base64'}, function(err){        
+      console.log('err', err);
+    });
+});
+
 // route to test if the user is logged in or not
 router.get('/loggedin', function(req, res) {
   console.log('Logged in EXPRESS' + JSON.stringify(req.user));

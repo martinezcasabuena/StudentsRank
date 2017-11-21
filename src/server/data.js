@@ -9,8 +9,7 @@ var fs = require('fs');
 
 module.exports = {
   saveGradedTasks: saveGradedTasks,
-  saveStudents: saveStudents,
-  saveImage: saveImage
+  saveStudents: saveStudents
 };
 
 function saveStudents(studentsJSON) {
@@ -56,37 +55,14 @@ function saveGradedTasks(gradedTasksJSON) {
     }});
 }*/
 
-function saveImage(){
-  let img = localStorage.getItem('profileImages')
+// function saveImage(){
+  // let img = localStorage.getItem('profileImages')
 
-  var data = img.replace(/^data:image\/\w+;base64,/, "");
-  //var buf = new Buffer(data, 'base64');
-  //fs.writeFile('image.png', buf);
-  //fs.writeFile('src/server/data/images/' + 'image.png', buf);
-  fs.writeFile("imagen.png", data, {encoding: 'base64'}, function(err){
-    console.log('err', err);
-  });
-}
-
-
-// function uploadFile() {
-//   var blobFile = $('#profileImage').files[0];
-//   var formData = new FormData();
-//   formData.append("fileToUpload", blobFile);
-
-//   $.ajax({
-//      url: "upload.php",
-//      type: "POST",
-//      data: formData,
-//      processData: false,
-//      contentType: false,
-//      success: function(response) {
-//        console.log("bien");
-//          // .. do something
-//      },
-//      error: function(jqXHR, textStatus, errorMessage) {
-//        console.log("error");
-//          console.log(errorMessage); // Optional
-//      }
-//   });
+  // var data = img.replace(/^data:image\/\w+;base64,/, "");
+  // //var buf = new Buffer(data, 'base64');
+  // //fs.writeFile('image.png', buf);
+  // //fs.writeFile('src/server/data/images/' + 'image.png', buf);
+  // fs.writeFile("imagen.png", data, {encoding: 'base64'}, function(err){
+  //   console.log('err', err);
+  // });
 // }

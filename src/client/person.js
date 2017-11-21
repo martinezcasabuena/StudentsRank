@@ -66,12 +66,12 @@ class Person {
     return gtArray.slice(0,context.showNumGradedTasks);
   }
 
+    /** Returns Graded Task points*/
   getGTtotalPoints() {
     return GradedTask.getStudentGradedTasksPoints(this.getId());
   }
 
   /** Calculate the Final Mark and returns*/
-
   getFinalMark() {
     let percentageGT = localStorage.getItem('percentageGT');
     let percentageXP = 100 - percentageGT;
@@ -79,7 +79,8 @@ class Person {
     let pointsGT = this.getGTtotalPoints();
     return ((pointsGT * percentageGT) / 100) + ((pointsXP * percentageXP) / 100);
   }
-
+  
+  /** Returns the profile image of the student*/
   getProfileImage() {
     let imageRoute = "../src/server/data/images/" + this.getId() +".jpg";
     return imageRoute;

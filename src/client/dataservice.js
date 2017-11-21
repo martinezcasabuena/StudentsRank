@@ -54,4 +54,9 @@ function loadGradedTasksToLocalStorage() {
   }
 }
 
-export {updateFromServer,saveStudents,saveGradedTasks};
+function uploadImage(image) {
+  loadTemplate('api/uploadImage',function(response) {
+                        },'POST',image,false);
+}
+
+export {updateFromServer,saveStudents,saveGradedTasks,uploadImage};
