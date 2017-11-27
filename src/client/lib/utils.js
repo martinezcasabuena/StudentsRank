@@ -44,6 +44,7 @@ function deleteCookie(name) {
 }
 
 function loadTemplate(urlTemplate,callback,method='GET',params='',cached=true) {
+  cached = false;
   if (CACHE_TEMPLATES.has(urlTemplate)) {
     return callback(CACHE_TEMPLATES.get(urlTemplate));
   }else {
@@ -63,8 +64,10 @@ function loadTemplate(urlTemplate,callback,method='GET',params='',cached=true) {
     };
     xhttp.open(method, urlTemplate, true);
     if (method === 'POST') {
-      if (urlTemplate === 'api/saveStudents' || urlTemplate === 'api/saveGradedTasks' || urlTemplate === 'api/uploadImage') {
+      if (urlTemplate === 'api/saveStudents' || urlTemplate === 'api/saveGradedTasks') {
         xhttp.setRequestHeader('Content-Type', 'application/json');
+      }else if (urlTemplate === 'api/uploadImage') {
+        console.log('uploading image'); //No special content-type
       }else {
         xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       }
