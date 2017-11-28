@@ -51,16 +51,16 @@ class Context {
     }.bind(this),'GET','',false);
   }
   /** Show login form template when not authenticated */
-  login() {
+  login() {    
     let that = this;
     if (!this.user) {
       this.clear();
       loadTemplate('templates/login.html',function(responseText) {
         hideMenu();
         document.getElementById('content').innerHTML = eval('`' + responseText + '`');
-        let loginForm = document.getElementById('loginForm');
+        let loginForm = $('#loginForm');
 
-        loginForm.addEventListener('submit', (event) => {
+        loginForm.submit(function(event) {
           event.preventDefault();
           deleteCookie('connect.sid');
           let username = document.getElementsByName('username')[0].value;
@@ -104,11 +104,7 @@ class Context {
       let scope = {};
 
       if (this.gradedTasks && this.gradedTasks.size > 0) {
-        /*if (this.showNumGradedTasks >= this.gradedTasks.size) {
-          this.showNumGradedTasks = this.gradedTasks.size;
-        }*/
         scope.TPL_GRADED_TASKS = [...this.gradedTasks.entries()].reverse();
-        //scope.TPL_GRADED_TASKS = arrayGradedTasks.slice(0,this.showNumGradedTasks);
       }
 
       scope.TPL_PERSONS = arrayFromMap;
@@ -117,40 +113,35 @@ class Context {
 
       loadTemplate('templates/rankingList.html',function(responseText) {
               let out = template(responseText,scope);
-              //console.log(out);
               document.getElementById('content').innerHTML = eval('`' + out + '`');
+              if (getCookie('expandedView') === 'visible') {
+                $('.tableGradedTasks').show();  
+                $('.fa-hand-o-right').addClass('fa-hand-o-down').removeClass('fa-hand-o-right');
+              }else {
+                $('.tableGradedTasks').hide();
+                $('.fa-hand-o-down').addClass('fa-hand-o-right').removeClass('fa-hand-o-down');
+              }
               let that = this;
               let callback = function() {
-                  let gtInputs = document.getElementsByClassName('gradedTaskInput');
-                  Array.prototype.forEach.call(gtInputs,function(gtInputItem) {
-                        gtInputItem.addEventListener('change', () => {
-                          let idPerson = gtInputItem.getAttribute('idStudent');
-                          let idGradedTask = gtInputItem.getAttribute('idGradedTask');
+                  $('.gradedTaskInput').each(function(index) {
+                        $(this).change(function() {
+                          let idPerson = $(this).attr('idStudent');
+                          let idGradedTask = $(this).attr('idGradedTask');
                           let gt = that.gradedTasks.get(parseInt(idGradedTask));
-                          gt.addStudentMark(idPerson,gtInputItem.value);
+                          gt.addStudentMark(idPerson,$(this).val());
                           that.getTemplateRanking();
                         });
                       });
-                  let profileImages = document.getElementsByClassName('profile'); //Image profiles TEST
-                  Array.prototype.forEach.call(profileImages,function(profileItem) { //TEST
-                    profileItem.addEventListener('mouseenter', () => { //TEST
-                      profileItem.removeAttribute('width'); //TEST
-                      profileItem.removeAttribute('height'); //TEST
+                  $('.profile').each(function(index) {
+                    $(this).mouseenter(function() { //TEST
+                      $(this).removeAttr('width'); //TEST
+                      $(this).removeAttr('height'); //TEST
                     });
-                    profileItem.addEventListener('mouseout', () => { //TEST
-                      profileItem.setAttribute('width',48); //TEST
-                      profileItem.setAttribute('height',60); //TEST
+                    $(this).mouseout(function() { //TEST
+                      $(this).attr('width',48); //TEST
+                      $(this).attr('height',60); //TEST
                     });
                   });
-                  
-                  let classNameMoreGradedTasksCookie = getCookie('classNameMoreGradedTasks');                  
-                  if(classNameMoreGradedTasksCookie){
-                    let classNameMoreGradedTasks = $("#iMoreGradedTasks").attr('class');
-                    $("#iMoreGradedTasks").removeClass(classNameMoreGradedTasks).addClass(classNameMoreGradedTasksCookie);                  
-                    if($("#iMoreGradedTasks").attr('class') == 'fa fa-hand-o-down fa-1x'){
-                      $('.tableGradedTasks').toggle(); 
-                    }
-                  }
                 };
               callback();
             }.bind(this));
@@ -161,29 +152,33 @@ class Context {
   }
   /** Settings */
   settings() {
+    let thisContext = this;
     let callback = function(responseText) {
       document.getElementById('content').innerHTML = responseText;
-      let itemWeightChanger = document.getElementById('weightChanger');
-      itemWeightChanger.value = this.weightXP;
+      let itemWeightChanger = $('#weightChanger');
+      itemWeightChanger.val(thisContext.weightXP);
       let labelXPWeight = document.getElementById('idXPweight');
-      labelXPWeight.innerHTML = this.weightXP + '% XP weight';
+      labelXPWeight.innerHTML = thisContext.weightXP + '% XP weight';
       let labelGPWeight = document.getElementById('idGPweight');
-      labelGPWeight.innerHTML = this.weightGP + '% GP weight';
-      itemWeightChanger.addEventListener('change', () => {
-          labelXPWeight.innerHTML = itemWeightChanger.value + '% XP weight';
-          this.weightXP = itemWeightChanger.value;
-          setCookie('weightXP',this.weightXP,300);
-          labelGPWeight.innerHTML = (100 - itemWeightChanger.value) + '% GP weight';
-          this.weightGP = (100 - itemWeightChanger.value);
-          setCookie('weightGP',this.weightGP,300);
+      labelGPWeight.innerHTML = thisContext.weightGP + '% GP weight';
+      itemWeightChanger.change(function() {
+          labelXPWeight.innerHTML = itemWeightChanger.val() + '% XP weight';
+          thisContext.weightXP = itemWeightChanger.val();
+          setCookie('weightXP',thisContext.weightXP,300);
+          labelGPWeight.innerHTML = (100 - itemWeightChanger.val()) + '% GP weight';
+          thisContext.weightGP = (100 - itemWeightChanger.val());
+          setCookie('weightGP',thisContext.weightGP,300);
         });
       console.log('Settings: To implement');
     }.bind(this);
     loadTemplate('templates/settings.html',callback);
   }
   /** Add last action performed to lower information layer in main app */
-  notify(text) {
-    document.getElementById('notify').innerHTML = text;
+  notify(text,title) {
+    toastr.options.timeOut = 4500;
+    toastr.options.hideDuration = 250;
+    toastr.options.showDuration = 250;
+    toastr.success(text, title);   
   }
 }
 export let context = new Context(); //Singleton export

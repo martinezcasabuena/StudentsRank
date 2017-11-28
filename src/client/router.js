@@ -5,7 +5,6 @@ import AttitudeTask from './classes/attitudetask.js';
 import GradedTask from './classes/gradedtask.js';
 import Person from './classes/person.js';
 
-
 /** Primitive routing mechanism based on detecting clicks on links and get the URL */
 function initRouter() {
   window.onclick = function(e) {
@@ -47,11 +46,16 @@ function initRouter() {
               logout();
               break;
             /** Button to show a one more graded task on ranking table list */
-            case /#MoreGradedTasks/.test(isLink.href):
+            case /#expandedView/.test(isLink.href):
               $('.tableGradedTasks').toggle();
-              $("#iMoreGradedTasks").toggleClass('fa fa-hand-o-right fa-1x fa fa-hand-o-down fa-1x');
-              let classNameMoreGradedTasks = $("#iMoreGradedTasks").attr('class');
-              setCookie('classNameMoreGradedTasks',classNameMoreGradedTasks);
+
+              if ($('.tableGradedTasks').is(':visible')) {
+                setCookie('expandedView','visible',345);
+                $('.fa-hand-o-right').addClass('fa-hand-o-down').removeClass('fa-hand-o-right');
+              }else {
+                setCookie('expandedView','hidden',345);
+                $('.fa-hand-o-down').addClass('fa-hand-o-right').removeClass('fa-hand-o-down');
+              }          
               break;
             /** Add new Graded Task form */
             case /#addGradedTask/.test(isLink.href):
