@@ -22,7 +22,7 @@ class AttitudeTask extends Task {
   }
   /** Open window dialog associated to a person instance and let us award him with some XP points */
   static addXP(personInstance) {
-    let popUpXP = popupwindow('templates/listAttitudeTasks.html','XP points to ' +
+    /*let popUpXP = popupwindow('templates/listAttitudeTasks.html','XP points to ' +
                                       personInstance.name,600,600);
 
     popUpXP.onload = function() {
@@ -36,7 +36,37 @@ class AttitudeTask extends Task {
                                   $(this).val(),$(this).attr('value')));
           });
         });
-    };
+    };*/
+
+   /* $('#myModal').on('show.bs.modal', function () {
+       popUpXP.document.title = personInstance.name + ' ' +
+                          personInstance.surname + ' XP points';
+
+      $(popUpXP.document.body).find('.xp').each(function(index) {
+          $(this).click(function() {
+            popUpXP.close();
+            personInstance.addAttitudeTask(new AttitudeTask('XP task',
+                                  $(this).val(),$(this).attr('value')));
+          });
+        });
+    })*/
+
+    var pageTitle = $('#myModal').attr('pageTitle');
+    var pageName = $('#myModal').attr('pageName');
+    $(".modal .modal-title").html(personInstance.name + ' ' +
+    personInstance.surname + ' XP points');
+    //$(".modal .modal-body").html("Content loading please wait...");
+    $(".modal").modal("show");
+    //$(".modal .modal-body").load(pageName);
+
+    $("#myModal").find('.xp').each(function(index) {
+      $(this).attr('data-dismiss',"modal");
+      $(this).click(function() {
+        //$(".modal").modal('toggle');
+        personInstance.addAttitudeTask(new AttitudeTask('XP task',
+                              $(this).val(),$(this).attr('value')));
+      });
+    });
   }
 }
 
