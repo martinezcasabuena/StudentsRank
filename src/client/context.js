@@ -57,14 +57,19 @@ class Context {
       this.clear();
       loadTemplate('templates/login.html',function(responseText) {
         hideMenu();
-        document.getElementById('content').innerHTML = eval('`' + responseText + '`');
+        $('#content').html(eval('`' + responseText + '`'));
         let loginForm = $('#loginForm');
 
         loginForm.submit(function(event) {
           event.preventDefault();
           deleteCookie('connect.sid');
+          
+          //let username = $("[name='username']")[0].val();
+          //let password = $("[name='password']")[0].val();
+          
           let username = document.getElementsByName('username')[0].value;
           let password = document.getElementsByName('password')[0].value;
+
           loadTemplate('api/login',function(userData) {
             that.user = JSON.parse(userData);
             setCookie('user',userData,7);
@@ -113,7 +118,7 @@ class Context {
 
       loadTemplate('templates/rankingList.html',function(responseText) {
               let out = template(responseText,scope);
-              document.getElementById('content').innerHTML = eval('`' + out + '`');
+              $('#content').html(eval('`' + out + '`'));              
               if (getCookie('expandedView') === 'visible') {
                 $('.tableGradedTasks').show();  
                 $('.fa-hand-o-right').addClass('fa-hand-o-down').removeClass('fa-hand-o-right');
@@ -147,25 +152,26 @@ class Context {
             }.bind(this));
     }else {
       //alert('NO STUDENTS');
-      document.getElementById('content').innerHTML = '';
+      $('#content').html('');
+      
     }
   }
   /** Settings */
   settings() {
     let thisContext = this;
     let callback = function(responseText) {
-      document.getElementById('content').innerHTML = responseText;
+     $('#content').html(responseText);
       let itemWeightChanger = $('#weightChanger');
       itemWeightChanger.val(thisContext.weightXP);
-      let labelXPWeight = document.getElementById('idXPweight');
-      labelXPWeight.innerHTML = thisContext.weightXP + '% XP weight';
-      let labelGPWeight = document.getElementById('idGPweight');
-      labelGPWeight.innerHTML = thisContext.weightGP + '% GP weight';
+      let labelXPWeight = $('#idXPweight');
+      labelXPWeight.html(thisContext.weightXP + '% XP weight');
+      let labelGPWeight = $('#idGPweight');
+      labelGPWeight.html(thisContext.weightGP + '% GP weight');
       itemWeightChanger.change(function() {
-          labelXPWeight.innerHTML = itemWeightChanger.val() + '% XP weight';
+          labelXPWeight.html(itemWeightChanger.val() + '% XP weight');
           thisContext.weightXP = itemWeightChanger.val();
           setCookie('weightXP',thisContext.weightXP,300);
-          labelGPWeight.innerHTML = (100 - itemWeightChanger.val()) + '% GP weight';
+          labelGPWeight.html((100 - itemWeightChanger.val()) + '% GP weight');
           thisContext.weightGP = (100 - itemWeightChanger.val());
           setCookie('weightGP',thisContext.weightGP,300);
         });
