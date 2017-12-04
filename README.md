@@ -1,3 +1,5 @@
+
+http://blog.karmadust.com/automatic-node-js-deployments-on-a-linux-server-via-github/
 # Introduction 
 The purpose of this project is to program a Students rank mini app using entiterly raw ES6 without the use
 of any third party library. The aim is to learn as much as possible only in javascript.
@@ -30,6 +32,10 @@ if has been installed globally.
 Other interesting gukp tasks
 
 *vet. For syntax and quality checking
+
+# For production deployment
+Start node server with forever <pre>npm start</pre>
+Stop node server <pre>npm stop</pre>
 
 # Key points about the development stack  we have chosen for this app
 

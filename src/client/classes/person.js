@@ -97,17 +97,17 @@ class Person {
       $('#idFirstName').val(this.name);
       $('#idSurnames').val(this.surname);
       let studentProfile = $('#myProfile');
-      let output = document.getElementById('output');
-      output.src = 'src/server/data/fotos/' + this.getId() + '.jpg';
+      let outputImg = $('#output');
+      outputImg.attr('src','src/server/data/fotos/' + this.getId() + '.jpg');
       let studentThis = this;
 
-      studentProfile.change(function(event) {
+      studentProfile.change(() => {
         let input = event.target;
         let reader = new FileReader();
         reader.onload = function() {
           let dataURL = reader.result;
-          output = $('#output');
-          output.src = dataURL;
+          //output = document.getElementById('output');
+          outputImg.attr('src',dataURL);
         };
         reader.readAsDataURL(input.files[0]);
       });

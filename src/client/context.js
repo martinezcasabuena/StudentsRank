@@ -1,4 +1,4 @@
-/**
+  /**
  * Context class. Devised to control every element involved in the app: students, gradedTasks ...
  *
  * @constructor
@@ -51,25 +51,21 @@ class Context {
     }.bind(this),'GET','',false);
   }
   /** Show login form template when not authenticated */
-  login() {    
+  login() {
     let that = this;
     if (!this.user) {
       this.clear();
       loadTemplate('templates/login.html',function(responseText) {
         hideMenu();
         $('#content').html(eval('`' + responseText + '`'));
+        $('#loginAlert').hide();
         let loginForm = $('#loginForm');
 
         loginForm.submit(function(event) {
           event.preventDefault();
           deleteCookie('connect.sid');
-          
-          //let username = $("[name='username']")[0].val();
-          //let password = $("[name='password']")[0].val();
-          
-          let username = document.getElementsByName('username')[0].value;
-          let password = document.getElementsByName('password')[0].value;
-
+          let username = $('input[name=username]').val();
+          let password = $('input[name=password]').val();
           loadTemplate('api/login',function(userData) {
             that.user = JSON.parse(userData);
             setCookie('user',userData,7);
@@ -118,9 +114,9 @@ class Context {
 
       loadTemplate('templates/rankingList.html',function(responseText) {
               let out = template(responseText,scope);
-              $('#content').html(eval('`' + out + '`'));              
+              $('#content').html(eval('`' + out + '`'));
               if (getCookie('expandedView') === 'visible') {
-                $('.tableGradedTasks').show();  
+                $('.tableGradedTasks').show();
                 $('.fa-hand-o-right').addClass('fa-hand-o-down').removeClass('fa-hand-o-right');
               }else {
                 $('.tableGradedTasks').hide();
@@ -152,26 +148,26 @@ class Context {
             }.bind(this));
     }else {
       //alert('NO STUDENTS');
-      $('#content').html('');
-      
+      $('#content').html('NO STUDENTS YET');
     }
   }
   /** Settings */
   settings() {
     let thisContext = this;
     let callback = function(responseText) {
-     $('#content').html(responseText);
+      $('#content').html(responseText);
       let itemWeightChanger = $('#weightChanger');
       itemWeightChanger.val(thisContext.weightXP);
       let labelXPWeight = $('#idXPweight');
-      labelXPWeight.html(thisContext.weightXP + '% XP weight');
+      labelXPWeight.text(thisContext.weightXP + '% XP weight');
       let labelGPWeight = $('#idGPweight');
-      labelGPWeight.html(thisContext.weightGP + '% GP weight');
+      labelGPWeight.text(thisContext.weightGP + '% GP weight');
+
       itemWeightChanger.change(function() {
-          labelXPWeight.html(itemWeightChanger.val() + '% XP weight');
+          $('#idXPweight').text(itemWeightChanger.val() + '% XP weight');
           thisContext.weightXP = itemWeightChanger.val();
           setCookie('weightXP',thisContext.weightXP,300);
-          labelGPWeight.html((100 - itemWeightChanger.val()) + '% GP weight');
+          $('#idGPweight').text((100 - itemWeightChanger.val()) + '% GP weight');
           thisContext.weightGP = (100 - itemWeightChanger.val());
           setCookie('weightGP',thisContext.weightGP,300);
         });

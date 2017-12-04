@@ -13,9 +13,9 @@ import Task from './task.js';
  * @tutorial pointing-criteria
  */
 
-import {popupwindow} from '../lib/utils.js';
+import {popupwindow,loadTemplate} from '../lib/utils.js';
 
-class AttitudeTask extends Task { 
+class AttitudeTask extends Task {
   constructor(name,description,points) {
     super(name,description);
     this.points = points;
@@ -25,7 +25,7 @@ class AttitudeTask extends Task {
     /*let popUpXP = popupwindow('templates/listAttitudeTasks.html','XP points to ' +
                                       personInstance.name,600,600);
 
-    popUpXP.onload = function() {
+    popUpXP.onload = function() { 
       popUpXP.document.title = personInstance.name + ' ' +
                           personInstance.surname + ' XP points';
 
@@ -37,37 +37,24 @@ class AttitudeTask extends Task {
           });
         });
     };*/
-
-   /* $('#myModal').on('show.bs.modal', function () {
-       popUpXP.document.title = personInstance.name + ' ' +
-                          personInstance.surname + ' XP points';
-
-      $(popUpXP.document.body).find('.xp').each(function(index) {
-          $(this).click(function() {
-            popUpXP.close();
-            personInstance.addAttitudeTask(new AttitudeTask('XP task',
-                                  $(this).val(),$(this).attr('value')));
-          });
+    let callback = function(responseText) {
+      $('#content').html($('#content').html() + eval('`' + responseText + '`'));
+      $('#XPModal').modal('toggle');
+      $('.xp').each(function(index) {
+        $(this).click(function() { 
+          $('#XPModal').modal('toggle');
+          $('.modal-backdrop').remove();
+          personInstance.addAttitudeTask(new AttitudeTask('XP task',
+            $(this).val(),$(this).attr('value')));
+                    
         });
-    })*/
-
-    var pageTitle = $('#myModal').attr('pageTitle');
-    var pageName = $('#myModal').attr('pageName');
-    $(".modal .modal-title").html(personInstance.name + ' ' +
-    personInstance.surname + ' XP points');
-    //$(".modal .modal-body").html("Content loading please wait...");
-    $(".modal").modal("show");
-    //$(".modal .modal-body").load(pageName);
-
-    $("#myModal").find('.xp').each(function(index) {
-      $(this).attr('data-dismiss',"modal");
-      $(this).click(function() {
-        //$(".modal").modal('toggle');
-        personInstance.addAttitudeTask(new AttitudeTask('XP task',
-                              $(this).val(),$(this).attr('value')));
       });
-    });
+    }
+    loadTemplate('templates/listAttitudeTasks.2.html',callback);
   }
 }
 
+function addTask() {
+
+}
 export default AttitudeTask;

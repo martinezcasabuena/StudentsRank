@@ -4,11 +4,11 @@ import {deleteCookie,loadTemplate} from './lib/utils.js';
 
 /** Show Menu  */
 function showMenu() {
-  $('#navbarNav').css("visibility", 'visible');
+  $('#navbarNav').show();
 }
 /** Hide Menu */
 function hideMenu() {
-  $('#navbarNav').css("visibility", 'hidden');
+  $('navbarNav').hide();
 }
 /** Generate menu options taking into account logged in user */
 function generateMenu() {
