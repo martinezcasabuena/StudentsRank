@@ -1,4 +1,6 @@
 import Task from './task.js';
+import {saveAttitudeTasks} from '../dataservice.js';
+import {context} from '../context.js';
 
 /**
  * AttitudeTask class. Create a attitude task in order to be
@@ -41,13 +43,16 @@ class AttitudeTask extends Task {
       $('#content').html($('#content').html() + eval('`' + responseText + '`'));
       $('#XPModal').modal('toggle');
       $('.xp').each(function(index) {
-        $(this).click(function() { 
+        $(this).click(function() {
           $('#XPModal').modal('toggle');
           $('.modal-backdrop').remove();
           personInstance.addAttitudeTask(new AttitudeTask('XP task',
             $(this).val(),$(this).attr('value')));
-                    
         });
+      });
+
+      $('#newAttitudeTask').submit(() => {
+        addTask();
       });
     }
     loadTemplate('templates/listAttitudeTasks.2.html',callback);
@@ -55,6 +60,16 @@ class AttitudeTask extends Task {
 }
 
 function addTask() {
-
+  let points = $('#points').val();
+  let description = $('#text').val();
+  let attitudetask = new AttitudeTask(description,description,points);
+  let attitudetaskId = attitudetask.getId();    
+  if (context) {
+    context.attitudeTasks.set(attitudetaskId,attitudetask);
+    console.log(context.attitudeTasks);          
+    saveAttitudeTasks(JSON.stringify([...context.attitudeTasks]));
+    context.getTemplateRanking();
+  }
+  return false; //Avoid form submit*/
 }
 export default AttitudeTask;

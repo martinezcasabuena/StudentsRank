@@ -12,6 +12,7 @@ var mkdirp = require('mkdirp');
 //===== NEW PERE ===========================================================
 router.get('/getStudents', getStudents);
 router.get('/getGradedTasks', getGradedTasks);
+router.get('/getAttitudeTasks',getAttitudeTasks);
  
 router.post('/uploadImage', uploadImage);
  
@@ -31,6 +32,18 @@ router.post('/saveGradedTasks',function(req, res) {
   if (req.isAuthenticated()) {
     //data.saveGradedTasks(req.body);
     fs.writeFile('src/server/data/' + req.user.id + '/gradedtasks.json', JSON.stringify(req.body), 'utf8', (err) => {
+      if (err) {
+        throw err;
+      }
+      console.log('The file has been saved!');
+    });
+      res.send('OK');
+    }
+});
+
+router.post('/saveAttitudeTasks',function(req, res) {
+  if (req.isAuthenticated()) {
+    fs.writeFile('src/server/data/' + 'AttitudeTasks.json', JSON.stringify(req.body), 'utf8', (err) => {
       if (err) {
         throw err;
       }
@@ -100,10 +113,10 @@ module.exports = router;
 /*function getPeople(req, res, next) {
   res.status(200).send(data.people);
 }*/
-function getStudents(req, res, next) { 
-  if (fs.existsSync('src/server/data/' + req.user.id + '/students.json')) {
+function getAttitudeTasks(req, res, next) {
+  if (fs.existsSync('src/server/data/AttitudeTasks.json')) {
     // Do something
-    fs.readFile('src/server/data/' + req.user.id + '/students.json',function(err, data) {
+    fs.readFile('src/server/data/AttitudeTasks.json',function(err, data) {
       if(err) {
         console.log(err);
       }
@@ -111,11 +124,12 @@ function getStudents(req, res, next) {
       res.status(200).send(data);
     });
   }else{
-    mkdirp('src/server/data/' + req.user.id, function (err) {
+    /*mkdirp('src/server/data/' + req.user.id, function (err) {
       if (err) console.error(err)
       else console.log('dir created')
      });
-     fs.writeFile('src/server/data/' + req.user.id + '/students.json', JSON.stringify([]), 'utf8', (err) => {
+     */
+     fs.writeFile('src/server/data/AttitudeTasks.json', JSON.stringify([]), 'utf8', (err) => {
       if (err) {
         throw err;
       }
@@ -185,6 +199,32 @@ function getGradedTasks(req, res, next) {
        console.log('The file has been saved empty!');
     });
   }
+}
+
+function getStudents(req, res, next) { 
+  if (fs.existsSync('src/server/data/' + req.user.id + '/students.json')) {
+    // Do something
+    fs.readFile('src/server/data/' + req.user.id + '/students.json',function(err, data) {
+      if(err) {
+        console.log(err);
+      }
+      console.log(data);
+      res.status(200).send(data);
+    });
+  }else{
+    mkdirp('src/server/data/' + req.user.id, function (err) {
+      if (err) console.error(err)
+      else console.log('dir created')
+     });
+     fs.writeFile('src/server/data/' + req.user.id + '/students.json', JSON.stringify([]), 'utf8', (err) => {
+      if (err) {
+        throw err;
+      }
+      res.status(200).send('[]');
+      console.log('The file has been saved empty!');
+    });
+  }  
+ 
 }
  
 /*function getPerson(req, res, next) {

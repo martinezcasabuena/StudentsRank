@@ -34,6 +34,14 @@ function saveGradedTasks(arrayGT) {
                           console.log('SAVE GRADED TASKS ' + response);
                         },'POST',arrayGT,false);
 }
+/** Save Attitude Tasls in server side */
+function saveAttitudeTasks(arrayAttitudeTasks) {
+  localStorage.setItem('AttitudeTasks',arrayAttitudeTasks);
+  loadTemplate('api/saveAttitudeTasks',function(response) {
+                          console.log('SAVE ATTITUDE TASKS ' + response);
+                        },'POST',arrayAttitudeTasks,false);
+}
+
 /** Load students from AJAX response and map to Person instances in context */
 function loadStudents(studentsStr) {
   //if (localStorage.getItem('students')) {
@@ -58,4 +66,15 @@ function loadGradedTasks(gradedTasksStr) {
   //}
 }
 
-export {updateFromServer,saveStudents,saveGradedTasks};
+/** Load attitude tasks from AJAX response and map to Person instances in context */
+function loadAttitudeTask(attitudeTasksStr) {
+  //if (localStorage.getItem('attitudeTasks')) {
+    let attitudeTasks = new Map(JSON.parse(attitudeTasksStr));
+    attitudeTasks_.forEach(function(value_,key_,attitudeTasks_) {
+      attitudeTasks_.set(key_,new Person(value_.name,value_.surname,
+          value_.attitudeTasks,value_.id));
+      });
+    context.attitudeTasks = attitudeTasks_;
+  }
+
+export {updateFromServer,saveStudents,saveGradedTasks,saveAttitudeTasks};

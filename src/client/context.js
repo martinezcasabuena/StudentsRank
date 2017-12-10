@@ -9,7 +9,7 @@
 
 import Person from './classes/person.js';
 import GradedTask from './classes/gradedtask.js';
-import {updateFromServer,saveStudents,saveGradedTasks} from './dataservice.js';
+import {updateFromServer,saveStudents,saveGradedTasks, saveAttitudeTasks} from './dataservice.js';
 import {hashcode,loadTemplate,setCookie,deleteCookie,getCookie} from './lib/utils.js';
 import {generateMenu,showMenu,hideMenu} from './menu.js';
 import {template} from './lib/templator.js';
@@ -19,6 +19,7 @@ class Context {
   constructor() {
     this.students = new Map();
     this.gradedTasks = new Map();
+    this.attitudeTasks = new Map();
     //this.showNumGradedTasks = 1;//Max visible graded tasks in ranking list table
     this.weightXP = parseInt(getCookie('weightXP')) || 25;
     this.weightGP = parseInt(getCookie('weightGP')) || 75;
@@ -30,6 +31,7 @@ class Context {
   clear() {
     this.students = new Map();
     this.gradedTasks = new Map();
+    this.attitudeTasks = new Map();
     //this.showNumGradedTasks = 1;
     this.user = undefined;
   }
@@ -182,5 +184,58 @@ class Context {
     toastr.options.showDuration = 250;
     toastr.success(text, title);   
   }
+
+  /** Draw Students ranking table in descendent order using total points as a criteria */
+  getTasks() {
+
+    if (this.attitudeTasks > 0) {
+      let arrayFromMap = [...this.attitudeTasks.entries()];
+
+      this.attitudeTasks = new Map(arrayFromMap);
+
+      saveAttitudeTasks(JSON.stringify([...this.attitudeTasks]));
+      let scope = {};
+
+      /*if (this.gradedTasks && this.gradedTasks.size > 0) {
+        scope.TPL_GRADED_TASKS = [...this.gradedTasks.entries()].reverse();
+      }*/
+
+      scope.TPL_TASKS = arrayFromMap;
+
+
+      loadTemplate('templates/rankingList.html',function(responseText) {
+              let out = template(responseText,scope);
+              $('#content').html(eval('`' + out + '`'));
+
+              let that = this;
+              let callback = function() {
+                  $('.gradedTaskInput').each(function(index) {
+                        $(this).change(function() {
+                          let idPerson = $(this).attr('idStudent');
+                          let idGradedTask = $(this).attr('idGradedTask');
+                          let gt = that.gradedTasks.get(parseInt(idGradedTask));
+                          gt.addStudentMark(idPerson,$(this).val());
+                          that.getTemplateRanking();
+                        });
+                      });
+                  $('.profile').each(function(index) {
+                    $(this).mouseenter(function() { //TEST
+                      $(this).removeAttr('width'); //TEST
+                      $(this).removeAttr('height'); //TEST
+                    });
+                    $(this).mouseout(function() { //TEST
+                      $(this).attr('width',48); //TEST
+                      $(this).attr('height',60); //TEST
+                    });
+                  });
+                };
+              callback();
+            }.bind(this));
+    }else {
+      //alert('NO STUDENTS');
+      $('#content').html('NO STUDENTS YET');
+    }
+  }
+
 }
 export let context = new Context(); //Singleton export

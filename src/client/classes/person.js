@@ -184,6 +184,8 @@ class Person {
                       iGradedTask.addStudentMark(student.getId(),0);
                     });
                 context.students.set(student.getId(),student);
+                console.log(context.students);          
+                
                 context.getTemplateRanking();
                 return false; //Avoid form submit
               }
