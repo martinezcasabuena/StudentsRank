@@ -11,23 +11,21 @@
         </div>
         <div class="modal-body">
           <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                  <strong>Positive behaviours</strong>
-                   <!-- <div class="btn-group-vertical"> -->
+            <div class="row" ng-repeat="xpItem in TPL_ATTITUDE_TASKS">
+                 <div class="col-md-12">
+                  <button class="xp btn btn-success" id=${xpItem[1].id} value=${xpItem[1].points}>${xpItem[1].points} ${xpItem[1].name}</button>
+                  
+                  <!--<strong>Positive behaviours</strong>
                     <button class="xp btn btn-success" value="20"> +20 Correctly answer a question in class using English </button>
                     <button class="xp btn btn-success" value="20" > +20 Present your solution in front of class </button>
                     <button class="xp btn btn-success" value="100" > +100 Finish a proposed task before class ends </button>
                     <button class="xp btn btn-success" value="50" > +50 Asking insightful questions about the lesson </button>
-                   <!-- </div> -->
                  
                   <strong>Negative behaviours</strong>
-                  <!-- <div class="btn-group-vertical"> -->
                     <button class="xp btn btn-danger" value="-20" > -20 Arriving late to class </button>
                     <button class="xp btn btn-danger" value="-30" > -30 Not answer in english when you have been asked in english </button>
-                    <button class="xp btn btn-danger" value="-100"> -100 Delayed homework delivery </button>
-                  <!-- </div> -->
-                </div>
+                    <button class="xp btn btn-danger" value="-100"> -100 Delayed homework delivery </button>-->
+                </div> 
               
                 
             </div>

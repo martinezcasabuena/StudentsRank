@@ -90,6 +90,10 @@ class Context {
   getGradedTaskById(idHash) {
     return this.gradedTasks.get(parseInt(idHash));
   }
+  /** Get a AttitudeTask instance by its ID */
+  getAttitudeTaskById(idHash) {
+    return this.attitudeTasks.get(parseInt(idHash));
+  }
   /** Draw Students ranking table in descendent order using total points as a criteria */
   getTemplateRanking() {
     generateMenu();
@@ -184,58 +188,5 @@ class Context {
     toastr.options.showDuration = 250;
     toastr.success(text, title);   
   }
-
-  /** Draw Students ranking table in descendent order using total points as a criteria */
-  getTasks() {
-
-    if (this.attitudeTasks > 0) {
-      let arrayFromMap = [...this.attitudeTasks.entries()];
-
-      this.attitudeTasks = new Map(arrayFromMap);
-
-      saveAttitudeTasks(JSON.stringify([...this.attitudeTasks]));
-      let scope = {};
-
-      /*if (this.gradedTasks && this.gradedTasks.size > 0) {
-        scope.TPL_GRADED_TASKS = [...this.gradedTasks.entries()].reverse();
-      }*/
-
-      scope.TPL_TASKS = arrayFromMap;
-
-
-      loadTemplate('templates/rankingList.html',function(responseText) {
-              let out = template(responseText,scope);
-              $('#content').html(eval('`' + out + '`'));
-
-              let that = this;
-              let callback = function() {
-                  $('.gradedTaskInput').each(function(index) {
-                        $(this).change(function() {
-                          let idPerson = $(this).attr('idStudent');
-                          let idGradedTask = $(this).attr('idGradedTask');
-                          let gt = that.gradedTasks.get(parseInt(idGradedTask));
-                          gt.addStudentMark(idPerson,$(this).val());
-                          that.getTemplateRanking();
-                        });
-                      });
-                  $('.profile').each(function(index) {
-                    $(this).mouseenter(function() { //TEST
-                      $(this).removeAttr('width'); //TEST
-                      $(this).removeAttr('height'); //TEST
-                    });
-                    $(this).mouseout(function() { //TEST
-                      $(this).attr('width',48); //TEST
-                      $(this).attr('height',60); //TEST
-                    });
-                  });
-                };
-              callback();
-            }.bind(this));
-    }else {
-      //alert('NO STUDENTS');
-      $('#content').html('NO STUDENTS YET');
-    }
-  }
-
 }
 export let context = new Context(); //Singleton export

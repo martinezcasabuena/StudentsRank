@@ -2,6 +2,7 @@ import {loadTemplate} from './lib/utils.js';
 import {context} from './context.js'; //Singleton
 import Person from './classes/person.js';
 import GradedTask from './classes/gradedtask.js';
+import AttitudeTask from './classes/attitudetask.js';
 
 /** Get students and grades from server and maintains a local copy in localstorage */
 function updateFromServer() {
@@ -14,6 +15,11 @@ function updateFromServer() {
     loadTemplate('api/getGradedTasks',function(response) {
                           //localStorage.setItem('gradedTasks',response);
                           loadGradedTasks(response);
+                          context.getTemplateRanking();
+                        },'GET','',false);
+    loadTemplate('api/getAttitudeTasks',function(response) {
+                          //localStorage.setItem('gradedTasks',response);
+                          loadAttitudeTask(response);
                           context.getTemplateRanking();
                         },'GET','',false);
   }
@@ -69,10 +75,10 @@ function loadGradedTasks(gradedTasksStr) {
 /** Load attitude tasks from AJAX response and map to Person instances in context */
 function loadAttitudeTask(attitudeTasksStr) {
   //if (localStorage.getItem('attitudeTasks')) {
-    let attitudeTasks = new Map(JSON.parse(attitudeTasksStr));
+    let attitudeTasks_ = new Map(JSON.parse(attitudeTasksStr));
     attitudeTasks_.forEach(function(value_,key_,attitudeTasks_) {
-      attitudeTasks_.set(key_,new Person(value_.name,value_.surname,
-          value_.attitudeTasks,value_.id));
+      attitudeTasks_.set(key_,new AttitudeTask(value_.name,value_.description,
+          value_.points,value_.uses,value_.id,));
       });
     context.attitudeTasks = attitudeTasks_;
   }
