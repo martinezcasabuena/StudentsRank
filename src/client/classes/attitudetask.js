@@ -38,27 +38,33 @@ class AttitudeTask extends Task {
     });
 
     scope.TPL_ATTITUDE_TASKS = arrayFromMap;
-  
+    
     let callback = function(responseText) {
       let out = template(responseText,scope);
       $('#content').html($('#content').html() + eval('`' + out + '`'));
       $('#XPModal').modal('toggle');
+
+      /** Checks the value of points to print on green or in red */
+      arrayFromMap.forEach(function(element) {
+        if(element[1].points<0){
+           $('#' + element[1].id).addClass('xp btn btn-danger').removeClass('btn-success');
+         }
+       }, this);
+
+      /** Assigns the attitude task to the student */
       $('.xp').each(function(index) {
         $(this).click(function() {
           $('#XPModal').modal('toggle');
           $('.modal-backdrop').remove();
-          //console.log(this.id);
+
           let atTaskInstance = context.getAttitudeTaskById(this.id);
           atTaskInstance.uses += 1;
-          //console.log(atTaskInstance);
-
           context.attitudeTasks.set(atTaskInstance.getId(),atTaskInstance);
           saveAttitudeTasks(JSON.stringify([...context.attitudeTasks]));
-          
+
           personInstance.addAttitudeTask(new AttitudeTask('XP task',
           $(this).val(),$(this).attr('value')));
           context.getTemplateRanking();
-          
         });
       });
 
@@ -74,6 +80,7 @@ function getId() {
   return this.id;
 }
 
+/** Creates a new task and assign it to the student */
 function addTask(personInstance) {
   let points = $('#points').val();
   let description = $('#text').val();
